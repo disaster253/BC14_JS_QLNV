@@ -2,7 +2,7 @@ function Manager() {
 	this.listStaff = JSON.parse(localStorage.getItem("listStaff")) || [];
 }
 Manager.prototype.init = function () {
-	if (this.listStaff === []) {
+	if (this.listStaff === 0) {
 		return;
 	}
 	this.listStaff = this.listStaff.map(function (staff) {

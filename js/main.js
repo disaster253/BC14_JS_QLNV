@@ -1,10 +1,4 @@
-document.getElementById("btnThemNV").addEventListener("click", addStaff)
-document.getElementById("btnCapNhat").addEventListener("click", updateStaff)
-document.getElementById("tableDanhSach").addEventListener("click", delegation);
-document.getElementById("btnTimNV").addEventListener("click", searchStaff);
-var manager = new Manager();
-manager.init();
-showDisplay(manager.listStaff);
+var listStaff = JSON.parse(localStorage.getItem("listStaff")) || [];
 function updateForm(staff) {
 	document.getElementById("tknv").value = staff.account || "";
 	document.getElementById("name").value = staff.fullName || "";
@@ -15,6 +9,7 @@ function updateForm(staff) {
 	document.getElementById("chucvu").value = staff.position || "";
 	document.getElementById("gioLam").value = staff.workingHours || "";
 };
+var manager = new Manager();
 function addStaff() {
 	var account = document.getElementById("tknv").value;
 	var fullName = document.getElementById("name").value;
@@ -59,8 +54,8 @@ function removeStaff(account) {
 }
 
 function searchStaff() {
-	var search = document.getElementById("txtSearch").value;
-	var newListStaff = staff.searchingStaff(search);
+	var search = document.getElementById("searchName").value;
+	var newListStaff = staff.searchStaff(search);
 	showDisplay(newListStaff);
 }
 function authentication(staff) {
@@ -98,7 +93,7 @@ function authentication(staff) {
 	return true;
 }
 function showDisplay(listStaff) {
-	var tbody = document.getElementById("tbodySinhVien");
+	var tbody = document.getElementById("tableDanhSach");
 	var html = "";
 	for (var i = 0; i < listStaff.length; i += 1) {
 		html += `
@@ -144,3 +139,10 @@ function selectStaff(account) {
 	document.getElementById("tknv").disabled = true;
 	updateForm(staff);
 }
+
+manager.init();
+showDisplay(manager.listStaff);
+document.getElementById("tableDanhSach").addEventListener("click", delegation);
+document.getElementById("btnThemNV").addEventListener("click", addStaff);
+document.getElementById("btnCapNhat").addEventListener("click", updateStaff);
+document.getElementById("btnTimNV").addEventListener("click", searchStaff);
