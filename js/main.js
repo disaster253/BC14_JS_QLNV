@@ -37,9 +37,9 @@ function removeStaff(account) {
 	showDisplay(staff.listStaff);
 }
 
-function SearchingStaff() {
+function searchingStaff() {
 	var search = document.getElementById("txtSearch").value;
-	var newListStaff = staff.SearchingStaff(search);
+	var newListStaff = staff.searchingStaff(search);
 	showDisplay(newListStaff);
 }
 function authentication(staff) {
@@ -90,9 +90,9 @@ function showDisplay(listStaff) {
 		  <td>${listStaff[i].calTotalSalary()}</td>
 		  <td>${listStaff[i].staffAssessment()}</td>
 		  <td>
-			<button class="btn btn-primary" data-action="select" data-masv="${listStaff[i].account
+			<button class="btn btn-primary" data-action="select" data-account="${listStaff[i].account
 			}">Update</button>
-			<button class="btn btn-danger" data-action="delete" data-masv="${listStaff[i].account
+			<button class="btn btn-danger" data-action="delete" data-account="${listStaff[i].account
 			}">Delete</button>
 		  </td>
 		</tr>
@@ -105,4 +105,13 @@ function resetForm() {
 	updateForm({});
 	document.getElementById("tknv").disabled = false;
 	document.getElementsByClassName("sp-thongbao").style.display = "none";
+}
+
+function delegation(event) {
+	var account = event.target.getAttribute("data-account")
+	var action = event.target.getAttribute("data-action")
+
+	if (action === "select") {
+
+	}
 }
