@@ -2,7 +2,17 @@ document.getElementById("btnThemNV").addEventListener("click", addStaff)
 document.getElementById("btnCapNhat").addEventListener("click", updateStaff)
 document.getElementById("tableDanhSach").addEventListener("click", delegation);
 document.getElementById("btnTimNV").addEventListener("click", searchStaff);
-var listStaff = JSON.parse(localStorage.getItem("listStaff")) || [];
+var start = new Manager();
+function updateForm(staff) {
+	document.getElementById("tknv").value = staff.account || "";
+	document.getElementById("name").value = staff.fullName || "";
+	document.getElementById("email").value = staff.email || "";
+	document.getElementById("password").value = staff.password || "";
+	document.getElementById("datepicker").value = staff.date || "";
+	document.getElementById("luongCB").value = staff.salary || "";
+	document.getElementById("chucvu").value = staff.position || "";
+	document.getElementById("gioLam").value = staff.workingHours || "";
+};
 function addStaff() {
 	var account = document.getElementById("tknv").value;
 	var fullName = document.getElementById("name").value;
@@ -14,18 +24,57 @@ function addStaff() {
 	var workingHours = +document.getElementById("gioLam").value;
 
 	var staff = new Staff(account, fullName, email, password, date, salary, position, workingHours);
-
-	staff.addStaff(staff)
+	var isValid = authentication(staff);
+	if (!isValid) {
+		return;
+	}
+	start.addStaff(staff);
+	showDisplay(staff.listStaff);
+	resetForm();
 }
-function xoaSinhVien(account) {
-	qlsv.xoaSinhVien(account);
-	hienThi(qlsv.dssv);
+function removeStaff(account) {
+	staff.xoaSinhVien(account);
+	showDisplay(staff.listStaff);
 }
 
-function timKiemSinhVien() {
+function SearchingStaff() {
 	var search = document.getElementById("txtSearch").value;
-	var newDssv = qlsv.timKiemSinhVien(search);
-	hienThi(newDssv);
+	var newListStaff = staff.SearchingStaff(search);
+	showDisplay(newListStaff);
+}
+function authentication(staff) {
+	var validator = new Validator();
+	var isValid =
+		validator.isRequired("tbTKNV", staff.account) &&
+		validator.usrCheck("tbTKNV", staff.account);
+	isValid &=
+		validator.isRequired("tbTen", staff.fullName) &&
+		validator.nameCheck("tbTen", staff.fullName);
+	isValid &=
+		validator.isRequired("tbEmail", staff.email) &&
+		validator.emailCheck("tbEmail", staff.email);
+	isValid &=
+		validator.isRequired("tbMatKhau", staff.password) &&
+		validator.pwdCheck("tbMatKhau", staff.password);
+	isValid &= validator.isRequired("tbNgay", staff.date);
+	isValid &=
+		validator.isRequired("tbLuongCB", staff.salary) &&
+		validator.salaryCheck("tbLuongCB", staff.salary);
+	isValid &= validator.isRequired("tbChucVu", staff.position);
+	isValid &=
+		validator.isRequired("tbGiolam", staff.workingHours) &&
+		validator.workHourCheck("tbGiolam", staff.workingHours);
+
+	if (!isValid) {
+		for (let key in validator.errors) {
+			if (validator.errors[key]) {
+				document.getElementById(key).style.display = "block";
+				document.getElementById(key).innerHTML = validator.errors[key];
+			}
+		}
+		return false;
+	}
+	return true;
 }
 function showDisplay(listStaff) {
 	var tbody = document.getElementById("tbodySinhVien");
@@ -51,4 +100,9 @@ function showDisplay(listStaff) {
 	}
 
 	tbody.innerHTML = html;
+}
+function resetForm() {
+	updateForm({});
+	document.getElementById("tknv").disabled = false;
+	document.getElementsByClassName("sp-thongbao").style.display = "none";
 }
