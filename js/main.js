@@ -2,7 +2,9 @@ document.getElementById("btnThemNV").addEventListener("click", addStaff)
 document.getElementById("btnCapNhat").addEventListener("click", updateStaff)
 document.getElementById("tableDanhSach").addEventListener("click", delegation);
 document.getElementById("btnTimNV").addEventListener("click", searchStaff);
-var start = new Manager();
+var manager = new Manager();
+manager.init();
+showDisplay(manager.listStaff);
 function updateForm(staff) {
 	document.getElementById("tknv").value = staff.account || "";
 	document.getElementById("name").value = staff.fullName || "";
@@ -28,7 +30,26 @@ function addStaff() {
 	if (!isValid) {
 		return;
 	}
-	start.addStaff(staff);
+	manager.addStaff(staff);
+	showDisplay(staff.listStaff);
+	resetForm();
+}
+function updateStaff() {
+	var account = document.getElementById("tknv").value;
+	var fullName = document.getElementById("name").value;
+	var email = document.getElementById("email").value;
+	var password = document.getElementById("password").value;
+	var date = document.getElementById("datepicker").value;
+	var salary = +document.getElementById("luongCB").value;
+	var position = document.getElementById("chucvu").value;
+	var workingHours = +document.getElementById("gioLam").value;
+
+	var staff = new Staff(account, fullName, email, password, date, salary, position, workingHours);
+	var isValid = authentication(staff);
+	if (!isValid) {
+		return;
+	}
+	manager.addStaff(staff);
 	showDisplay(staff.listStaff);
 	resetForm();
 }
@@ -37,7 +58,7 @@ function removeStaff(account) {
 	showDisplay(staff.listStaff);
 }
 
-function searchingStaff() {
+function searchStaff() {
 	var search = document.getElementById("txtSearch").value;
 	var newListStaff = staff.searchingStaff(search);
 	showDisplay(newListStaff);
@@ -112,6 +133,14 @@ function delegation(event) {
 	var action = event.target.getAttribute("data-action")
 
 	if (action === "select") {
-
+		selectStaff(account);
 	}
+	if (action === "delete") {
+		removeStaff(account);
+	}
+}
+function selectStaff(account) {
+	SelectStaff = manager.selectStaff(account);
+	document.getElementById("tknv").disabled = true;
+	updateForm(staff);
 }
