@@ -2,7 +2,7 @@ function Manager() {
 	this.listStaff = JSON.parse(localStorage.getItem("listStaff")) || [];
 }
 Manager.prototype.init = function () {
-	if (this.listStaff === 0) {
+	if (this.listStaff.length === 0) {
 		return;
 	}
 	this.listStaff = this.listStaff.map(function (staff) {
@@ -62,7 +62,7 @@ Manager.prototype.staffAssessment = function () {
 	}
 }
 
-Manager.prototype.findStaff = function (staffClassify) {
+Manager.prototype.searchStaff = function (staffClassify) {
 	var temp = this.listStaff.filter(function (staff, index) {
 		staffClassify = staffClassify.trim().toLowerCase();
 		var classifyStaff = staff.staffClassify.toLowerCase().trim();

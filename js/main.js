@@ -9,7 +9,7 @@ function updateForm(staff) {
 	document.getElementById("chucvu").value = staff.position || "";
 	document.getElementById("gioLam").value = staff.workingHours || "";
 };
-var manager = new Manager();
+var manager = new Manager();//không định nghĩa đc hàm 
 function addStaff() {
 	var account = document.getElementById("tknv").value;
 	var fullName = document.getElementById("name").value;
@@ -62,16 +62,16 @@ function authentication(staff) {
 	var validator = new Validator();
 	var isValid =
 		validator.isRequired("tbTKNV", staff.account) &&
-		validator.usrCheck("tbTKNV", staff.account);
+		validator.accountCheck("tbTKNV", staff.account);
 	isValid &=
 		validator.isRequired("tbTen", staff.fullName) &&
-		validator.nameCheck("tbTen", staff.fullName);
+		validator.fullNameCheck("tbTen", staff.fullName);
 	isValid &=
 		validator.isRequired("tbEmail", staff.email) &&
 		validator.emailCheck("tbEmail", staff.email);
 	isValid &=
 		validator.isRequired("tbMatKhau", staff.password) &&
-		validator.pwdCheck("tbMatKhau", staff.password);
+		validator.passwordCheck("tbMatKhau", staff.password);
 	isValid &= validator.isRequired("tbNgay", staff.date);
 	isValid &=
 		validator.isRequired("tbLuongCB", staff.salary) &&
@@ -79,7 +79,7 @@ function authentication(staff) {
 	isValid &= validator.isRequired("tbChucVu", staff.position);
 	isValid &=
 		validator.isRequired("tbGiolam", staff.workingHours) &&
-		validator.workHourCheck("tbGiolam", staff.workingHours);
+		validator.workingHoursCheck("tbGiolam", staff.workingHours);
 
 	if (!isValid) {
 		for (let key in validator.errors) {
@@ -146,3 +146,4 @@ document.getElementById("tableDanhSach").addEventListener("click", delegation);
 document.getElementById("btnThemNV").addEventListener("click", addStaff);
 document.getElementById("btnCapNhat").addEventListener("click", updateStaff);
 document.getElementById("btnTimNV").addEventListener("click", searchStaff);
+//
